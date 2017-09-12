@@ -26,10 +26,36 @@ public class BangBangController implements UltrasonicController {
   public void processUSData(int distance) {
     this.distance = distance;
     // TODO: process a movement based on the us distance passed in (BANG-BANG style)
+    int distError = bandCenter - distance;
+    
+    // If Jerry is within limits, move straight
+    if(Math.abs(distError) <= bandwidth){
+        WallFollowingLab.leftMotor.setSpeed(motorHigh); // Start robot moving forward
+        WallFollowingLab.rightMotor.setSpeed(motorHigh);
+        WallFollowingLab.leftMotor.forward();
+        WallFollowingLab.rightMotor.forward();
+    }
+    else if(distError > 0){
+        WallFollowingLab.leftMotor.setSpeed(motorHigh+correction(distError));
+        WallFollowingLab.rightMotor.setSpeed(motorHigh-correction(distError));
+        WallFollowingLab.leftMotor.forward();
+        WallFollowingLab.rightMotor.forward();
+    }
+    else if(distError < 0){
+        WallFollowingLab.leftMotor.setSpeed(motorHigh-correction(distError)); // Start robot moving forward
+        WallFollowingLab.rightMotor.setSpeed(motorHigh+correction(distError));
+        WallFollowingLab.leftMotor.forward();
+        WallFollowingLab.rightMotor.forward();
+    }
   }
 
   @Override
   public int readUSDistance() {
     return this.distance;
+  }
+  
+  private static int correction(int distError){
+	  Double d = 100/(1 + Math.exp(-1 * distError/5));
+	  return d.intValue();
   }
 }

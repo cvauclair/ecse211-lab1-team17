@@ -14,7 +14,7 @@ public class WallFollowingLab {
   private static final int bandCenter = 20; // Offset from the wall (cm)
   private static final int bandWidth = 3; // Width of dead band (cm)
   private static final int motorLow = 100; // Speed of slower rotating wheel (deg/sec)
-  private static final int motorHigh = 200; // Speed of the faster rotating wheel (deg/seec)
+  private static final int motorHigh = 150; // Speed of the faster rotating wheel (deg/seec)
 
 
   private static final Port usPort = LocalEV3.get().getPort("S1");
@@ -45,10 +45,8 @@ public class WallFollowingLab {
 
     @SuppressWarnings("resource") // Because we don't bother to close this resource
     SensorModes usSensor = new EV3UltrasonicSensor(usPort); // usSensor is the instance
-    SampleProvider usDistance = usSensor.getMode("Distance"); // usDistance provides samples from
-                                                              // this instance
-    float[] usData = new float[usDistance.sampleSize()]; // usData is the buffer in which data are
-                                                         // returned
+    SampleProvider usDistance = usSensor.getMode("Distance"); // usDistance provides samples from this instance
+    float[] usData = new float[usDistance.sampleSize()]; // usData is the buffer in which data are returned
 
     // Setup Printer
     // This thread prints status information in the background

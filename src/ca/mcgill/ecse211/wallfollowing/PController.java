@@ -18,10 +18,10 @@ public class PController implements UltrasonicController {
     this.bandWidth = bandwidth;
     this.filterControl = 0;
 
-    WallFollowingLab.leftMotor.setSpeed(MOTOR_SPEED); // Initalize motor rolling forward
-    WallFollowingLab.rightMotor.setSpeed(MOTOR_SPEED);
-    WallFollowingLab.leftMotor.forward();
-    WallFollowingLab.rightMotor.forward();
+//    WallFollowingLab.leftMotor.setSpeed(MOTOR_SPEED); // Initialize motor rolling forward
+//    WallFollowingLab.rightMotor.setSpeed(MOTOR_SPEED);
+//    WallFollowingLab.leftMotor.forward();
+//    WallFollowingLab.rightMotor.forward();
   }
 
   @Override
