@@ -27,35 +27,18 @@ public class UltrasonicPoller extends Thread {
    * @see java.lang.Thread#run()
    */
   public void run() {
-    int distance;
+    int distance, realDistance;
     float sum;
     int totalCounted;
     while (true) {
-       sum = 0;
-       totalCounted = 0;
-       // Get 10 data points
-       for(int i = 0; i < 10; i++){
-    	   us.fetchSample(usData, 0); // acquire data	
-    	   if(usData[0] < 1.0){
-    		   sum += usData[0];
-    		   totalCounted++;
-    	   }
-       }
-    	
-      // Average out the results
-//      sum = 0;
-//      totalCounted = 0;
-//      for(float dist : usData){
-//    	  // Only get data if distance is not too large
-//    	  if(dist < 1.0){
-//        	  sum += dist;
-//        	  totalCounted++;
-//    	  }
-//      }
-//      distance = (int) (usData[0] * 100.0); // extract from buffer, cast to int
-      distance = (int) (100.0 * sum/totalCounted);
+      sum = 0;
+      totalCounted = 0;
+       
+      us.fetchSample(usData, 0);
+      distance = (int) (usData[0] * 100.0); // extract from buffer, cast to int
+      realDistance = (int)(Math.cos(45) * distance);
       
-      cont.processUSData(distance); // now take action depending on value
+      cont.processUSData(realDistance); // now take action depending on value
       try {
         Thread.sleep(50);
       } catch (Exception e) {
