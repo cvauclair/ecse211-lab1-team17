@@ -28,15 +28,16 @@ public class UltrasonicPoller extends Thread {
    */
   public void run() {
     int distance, realDistance;
-    float sum;
-    int totalCounted;
+    int sum;
     while (true) {
       sum = 0;
-      totalCounted = 0;
-       
-      us.fetchSample(usData, 0);
-      distance = (int) (usData[0] * 100.0); // extract from buffer, cast to int
-      realDistance = (int)(Math.cos(45) * distance);
+      for(int i = 0; i < 8; i++){
+    	us.fetchSample(usData, 0);
+    	sum += (int)(usData[0] * 100.0);
+      }
+//      us.fetchSample(usData, 0);
+//      distance = (int) (usData[0] * 100.0); // extract from buffer, cast to int
+      realDistance = (int)(Math.cos(45) * sum/8);
       
       cont.processUSData(realDistance); // now take action depending on value
       try {
