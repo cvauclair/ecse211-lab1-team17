@@ -29,7 +29,7 @@ public class BangBangController implements UltrasonicController {
     // TODO: process a movement based on the us distance passed in (BANG-BANG style)
     int distError = bandCenter - distance;
     
-    // If Jerry is within limits, move straight
+    // If bot is within limits, move straight
     if(Math.abs(distError) <= bandwidth){
         WallFollowingLab.leftMotor.setSpeed(motorHigh); // Start robot moving forward
         WallFollowingLab.rightMotor.setSpeed(motorHigh);

@@ -6,6 +6,8 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.Port;
 import lejos.robotics.SampleProvider;
 import lejos.hardware.Button;
+import lejos.utility.Timer;
+import lejos.utility.TimerListener;
 
 public class WallFollowingLab {
 
@@ -15,7 +17,7 @@ public class WallFollowingLab {
   private static final int bandWidth = 3; // Width of dead band (cm)
   private static final int motorLow = 100; // Speed of slower rotating wheel (deg/sec)
   private static final int motorHigh = 200; // Speed of the faster rotating wheel (deg/seec)
-
+  private static final int sinterval = 30;	// 10Hz sampling rate
 
   private static final Port usPort = LocalEV3.get().getPort("S1");
   public static final EV3LargeRegulatedMotor leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
@@ -23,7 +25,7 @@ public class WallFollowingLab {
 
   // Main entry point - instantiate objects used and set up sensor
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException{
 
     int option = 0;
     Printer.printMainMenu(); // Set up the display on the EV3 screen
@@ -47,7 +49,7 @@ public class WallFollowingLab {
     SensorModes usSensor = new EV3UltrasonicSensor(usPort); // usSensor is the instance
     SampleProvider usDistance = usSensor.getMode("Distance"); // usDistance provides samples from this instance
     float[] usData = new float[usDistance.sampleSize()]; // usData is the buffer in which data are returned
-
+    
     // Setup Printer
     // This thread prints status information in the background
     Printer printer = null;
@@ -73,6 +75,10 @@ public class WallFollowingLab {
         break;
     }
 
+    // Setup Timer and start Timer thread
+//    Timer timer = new Timer(sinterval, usPoller);
+//    timer.start();
+    
     // Start the poller and printer threads
     usPoller.start();
     printer.start();
@@ -80,6 +86,5 @@ public class WallFollowingLab {
     // Wait here forever until button pressed to terminate wallfollower
     Button.waitForAnyPress();
     System.exit(0);
-
   }
 }
