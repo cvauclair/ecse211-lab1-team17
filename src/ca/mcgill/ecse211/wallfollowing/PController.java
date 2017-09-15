@@ -12,7 +12,8 @@ public class PController implements UltrasonicController {
   private final int bandWidth;
   private int distance;
   private int filterControl;
-
+  private int distError;
+  
   public PController(int bandCenter, int bandwidth) {
     this.bandCenter = bandCenter;
     this.bandWidth = bandwidth;
@@ -48,8 +49,36 @@ public class PController implements UltrasonicController {
     }
 
     // TODO: process a movement based on the us distance passed in (P style)
+    distError = bandCenter - distance;
+    
+    // If Jerry is within limits, move straight
+    if(Math.abs(distError) <= bandWidth){
+        WallFollowingLab.leftMotor.setSpeed(MOTOR_SPEED); // Start robot moving forward
+        WallFollowingLab.rightMotor.setSpeed(MOTOR_SPEED);
+        WallFollowingLab.leftMotor.forward();
+        WallFollowingLab.rightMotor.forward();
+    }
+    else if(distError > 0){	// Too close
+        WallFollowingLab.leftMotor.setSpeed(MOTOR_SPEED+correction(distError));
+        WallFollowingLab.rightMotor.setSpeed(MOTOR_SPEED-correction(distError));
+        WallFollowingLab.leftMotor.forward();
+        WallFollowingLab.rightMotor.forward();
+    }
+    else if(distError < 0){	// Too far
+        WallFollowingLab.leftMotor.setSpeed(MOTOR_SPEED-correction(distError)); // Start robot moving forward
+        WallFollowingLab.rightMotor.setSpeed(MOTOR_SPEED+correction(distError));
+        WallFollowingLab.leftMotor.forward();
+        WallFollowingLab.rightMotor.forward();
+    }
   }
 
+  private static int correction(int distError){
+//	  return (int) (150/(1 + Math.exp(-1.0 * (Math.abs(distError)-10)/5)));
+	  int correction = 10*distError;
+	  
+	  // Prevent correction from being greater than the base speed of the motors
+	  return correction > MOTOR_SPEED ? MOTOR_SPEED : correction;
+  }
 
   @Override
   public int readUSDistance() {

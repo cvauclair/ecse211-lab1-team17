@@ -37,14 +37,14 @@ public class BangBangController implements UltrasonicController {
         WallFollowingLab.rightMotor.forward();
     }
     else if(distError > 0){	// Too close
-        WallFollowingLab.leftMotor.setSpeed(motorHigh+correction(distError));
-        WallFollowingLab.rightMotor.setSpeed(motorHigh-correction(distError));
+        WallFollowingLab.leftMotor.setSpeed(motorHigh+delta);
+        WallFollowingLab.rightMotor.setSpeed(motorHigh-delta);
         WallFollowingLab.leftMotor.forward();
         WallFollowingLab.rightMotor.forward();
     }
     else if(distError < 0){	// Too far
-        WallFollowingLab.leftMotor.setSpeed(motorHigh-correction(distError)); // Start robot moving forward
-        WallFollowingLab.rightMotor.setSpeed(motorHigh+correction(distError));
+        WallFollowingLab.leftMotor.setSpeed(motorHigh-delta); // Start robot moving forward
+        WallFollowingLab.rightMotor.setSpeed(motorHigh+delta);
         WallFollowingLab.leftMotor.forward();
         WallFollowingLab.rightMotor.forward();
     }
@@ -53,9 +53,5 @@ public class BangBangController implements UltrasonicController {
   @Override
   public int readUSDistance() {
     return this.distance;
-  }
-  
-  private static int correction(int distError){
-	  return (int) (150/(1 + Math.exp(-1.0 * (Math.abs(distError)-10)/5)));
   }
 }
